@@ -18,10 +18,10 @@ compute2-vfarias2-example.com ansible_host=172.16.1.23
 
 [LATAM-SME-OSP-TestDrive-working-01:vars]
 ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p -q cloud-user@testdrivedirector-node-id.srv.ravcloud.com"'
-controllerFqdn=controller-latamsmeosptestdri-fvfecozc.srv.ravcloud.com
+controllerFqdn=controller-node-id.ravcloud.com
 
 [LATAM-SME-OSP-TestDrive-working-02:vars]
 ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p -q cloud-user@testdrivedirector-node-id.srv.ravcloud.com"'
 #ansible_ssh_common_args='-o ProxyCommand="ssh -o StrictHostKeyChecking=no -W %h:%p -q cloud-user@testdrivedirector-node-id.srv.ravcloud.com"'
-controllerFqdn=controller-latamsmeosptestdri-5yql8otu.srv.ravcloud.com
+controllerFqdn=controller-node-id.srv.ravcloud.com
 
