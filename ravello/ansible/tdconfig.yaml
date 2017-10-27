@@ -1,0 +1,56 @@
+---
+- hosts: director-all
+  vars:
+    ansible_user: cloud-user
+  gather_facts: no
+
+  tasks:
+    - name: Set authorized keys for instructor
+      become: yes
+      authorized_key:
+        user: stack
+        state: present
+        key: "{{ lookup('file', '/home/vfarias/tmp/vfarias-test.pub') }}"
+
+
+
+- hosts: overcloud-all
+  vars:
+    ansible_user: heat-admin
+    ansible_ssh_private_key_file: sshkey
+  gather_facts: no
+
+  tasks:
+    - name: configure novncproxy_base_url
+      become: true
+      ini_file:
+        path: /etc/nova/nova.conf
+        section: vnc
+        option: novncproxy_base_url
+        value: 'http://{{ controllerFqdn }}:6080/vnc_auto.html'
+        backup: yes
+      register: base_url
+    
+    # facts gathering is disabled but we need to know if it's a controller or compute
+    - name: Check host role
+      command: hostname
+      register: hostname
+
+    - set_fact:
+        nodeHostname: '{{ hostname.stdout }}'
+
+    - name: Restart openstack-nova-novncproxy (controller)
+      become: true
+      systemd:
+        name: openstack-nova-novncproxy.service
+        state: restarted
+      when: nodeHostname | match("controller.*") and base_url.changed
+
+    - name: Restart openstack-nova-compute (compute)
+      become: true
+      systemd:
+        name: openstack-nova-compute.service
+        state: restarted
+      when: nodeHostname | match("compute.*") and base_url.changed
+
+

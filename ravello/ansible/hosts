@@ -1,0 +1,15 @@
+[director-all]
+director-vfarias-example.com ansible_host=testdrivedirector-nodeid.srv.ravcloud.com
+
+[overcloud-all:children]
+LATAM-SME-OSP-TestDrive-working
+
+[LATAM-SME-OSP-TestDrive-working]
+controller-vfarias-example.com ansible_host=172.16.1.27
+compute1-vfarias-example.com ansible_host=172.16.1.25
+compute2-vfarias-example.com ansible_host=172.16.1.23
+
+[LATAM-SME-OSP-TestDrive-working:vars]
+ansible_ssh_common_args='-o ProxyCommand="ssh -W %h:%p -q cloud-user@testdrivedirector-nodeid.srv.ravcloud.com"'
+controllerFqdn=controller-nodeid.srv.ravcloud.com
+
