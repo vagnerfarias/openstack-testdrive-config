@@ -59,20 +59,22 @@ def build_inventory(apps,app_filter,client):
         for app in apps:
             if re.search('^'+app_filter,app['name'].encode('utf-8')) is not None and app['published']:
                     group[app['name']] = []
+                    group[app['name']+':vars'] = []
                     group[app['name']].append('controller-'+app['name']+' nodeIp=172.16.1.27')
                     group[app['name']].append('compute1-'+app['name']+' nodeIp=172.16.1.25')
                     group[app['name']].append('compute2-'+app['name']+' nodeIp=172.16.1.23')
                     vms = get_vms(app['id'],client)
                     for vm in vms:
                         if re.search('^controller',vm['name'].encode('utf-8')) is not None:
-                            group[app['name']].append('controllerFqdn=' +vm['externalFqdn'])
+                            group[app['name']+':vars'].append('controllerFqdn=' +vm['externalFqdn'])
                         elif re.search('director',vm['name'].encode('utf-8')) is not None:
-                            group[app['name']].append('ansible_ssh_common_args=\'-o ProxyCommand=\"ssh -W {{ nodeIp }}:%p -q cloud-user@' + vm['externalFqdn'] + '\"\'')
-
-
-
-        return group
-                    
+                            group[app['name']+':vars'].append('ansible_ssh_common_args=\'-o ProxyCommand=\"ssh -W {{ nodeIp }}:%p -q cloud-user@' + vm['externalFqdn'] + '\"\'')
+        
+        for section, items in group.iteritems():
+            print '[' + section + ']'
+            for index, line in enumerate(items):
+                print line
+            print ''
 
 
 		
@@ -96,9 +98,8 @@ def main():
         # FIXME: testing filter
         app_filter='LATAM-SME-OSP'
 
-        x = build_inventory(apps, app_filter, client)
+        build_inventory(apps, app_filter, client)
 
-        print x
 
 #        for app in apps:
 #            creation_time = datetime.datetime.fromtimestamp(app['creationTime']/1000).strftime('%Y-%m-%d %H:%M')
