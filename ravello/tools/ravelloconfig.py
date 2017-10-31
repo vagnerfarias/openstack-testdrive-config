@@ -56,8 +56,11 @@ def print_vms(vms,out_file):
 
 def build_inventory(apps,app_filter,client):
         group = {}
+        group['director-all'] = []
+        group['overcloud-all:children'] = []
         for app in apps:
             if re.search('^'+app_filter,app['name'].encode('utf-8')) is not None and app['published']:
+                    group['overcloud-all:children'].append(app['name'])
                     group[app['name']] = []
                     group[app['name']+':vars'] = []
                     group[app['name']].append('controller-'+app['name']+' nodeIp=172.16.1.27')
@@ -69,14 +72,16 @@ def build_inventory(apps,app_filter,client):
                             group[app['name']+':vars'].append('controllerFqdn=' +vm['externalFqdn'])
                         elif re.search('director',vm['name'].encode('utf-8')) is not None:
                             group[app['name']+':vars'].append('ansible_ssh_common_args=\'-o ProxyCommand=\"ssh -W {{ nodeIp }}:%p -q cloud-user@' + vm['externalFqdn'] + '\"\'')
+                            group['director-all'].append('director-' + app['name'] + ' ansible_host=' + vm['externalFqdn'])
+
         
-        for section, items in group.iteritems():
+        for section, items in sorted(group.iteritems()):
             print '[' + section + ']'
             for index, line in enumerate(items):
                 print line
             print ''
 
-
+        #print group
 		
 def main():
 	parser = mkparser()
