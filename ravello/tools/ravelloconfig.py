@@ -23,6 +23,7 @@ import datetime
 import json
 import re
 import ConfigParser
+import StringIO
 from argparse import ArgumentParser
 from ravello_sdk import *
 from common import *
@@ -31,6 +32,7 @@ def mkparser():
         parser = ArgumentParser()
         parser.add_argument("-u", dest="username",default=None,help='Ravello user account name')
         parser.add_argument("-o", dest="out_file",default=None,help='output file')
+        parser.add_argument("-f", dest="app_filter",default="None",help='List only applications beggining with this string')
         return parser
 
 
@@ -54,7 +56,7 @@ def print_vms(vms,out_file):
                                 for vm in vms:
                                         f.write(json.dumps(vms,indent=5))
 
-def build_inventory(apps,app_filter,client):
+def build_inventory(apps,app_filter,client,out_file):
         group = {}
         group['director-all'] = []
         group['overcloud-all:children'] = []
@@ -74,12 +76,22 @@ def build_inventory(apps,app_filter,client):
                             group[app['name']+':vars'].append('ansible_ssh_common_args=\'-o ProxyCommand=\"ssh -W {{ nodeIp }}:%p -q cloud-user@' + vm['externalFqdn'] + '\"\'')
                             group['director-all'].append('director-' + app['name'] + ' ansible_host=' + vm['externalFqdn'])
 
+        if out_file:
+            with open(out_file,'w') as f:
+                for section, items in sorted(group.iteritems()):
+                    f.write('[' + section + ']\n')
+                    for index, line in enumerate(items):
+                        f.write(line + '\n')
+                    f.write('\n')
+        else:
         
-        for section, items in sorted(group.iteritems()):
-            print '[' + section + ']'
-            for index, line in enumerate(items):
-                print line
-            print ''
+            for section, items in sorted(group.iteritems()):
+                print '[' + section + ']'
+                for index, line in enumerate(items):
+                    print line
+                print ''
+    
+           
 
         #print group
 		
@@ -101,9 +113,9 @@ def main():
 	apps = client.get_applications()
 
         # FIXME: testing filter
-        app_filter='LATAM-SME-OSP'
+        #app_filter='LATAM-SME-OSP'
 
-        build_inventory(apps, app_filter, client)
+        build_inventory(apps, args.app_filter, client, args.out_file)
 
 
 #        for app in apps:
