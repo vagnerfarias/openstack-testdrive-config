@@ -13,7 +13,7 @@ In the ravello directory you'll find ansible playbooks to configure the OpenStac
 
 ### python-pip and python-virtutalenv packages
 
-** Fedora **
+**Fedora**
 
 Simply install the python-pip RPM.
 
@@ -21,7 +21,7 @@ Simply install the python-pip RPM.
 $ su -c 'dnf install python-pip'
 ```
 
-** RHEL 7 **
+**RHEL 7**
 
 At least rhel-7-server-rpms and EPEL repository should be enabled in the system.
 
@@ -44,13 +44,13 @@ $ pip install ravello-sdk
 
 Install git package.
 
-** Fedora **
+**Fedora**
 
 ```
 $ su -c 'dnf install git'
 ```
 
-** RHEL 7 **
+**RHEL 7**
 
 ```
 $ su -c 'yum install git'
