@@ -18,7 +18,7 @@ In the ravello directory you'll find ansible playbooks to configure the OpenStac
 Simply install the python-pip RPM.
 
 ```
-$ su -c 'dnf install python-pip'
+$ su -c 'dnf install python-pip python-virtualenv'
 ```
 
 **RHEL 7**
