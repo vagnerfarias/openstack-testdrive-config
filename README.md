@@ -138,6 +138,7 @@ Use scp to get the ssh private key from any enviroment. It'll be at ~stack/.ssh/
 
 ```
 $ scp stack@<director-node>:.ssh/id_rsa ~/heat-admin-sshkey
+$ chmod 600 ~/heat-admin-sshkey
 ```
 
 #### Set the path for heat-admin ssh private key in tdconfig.yaml
