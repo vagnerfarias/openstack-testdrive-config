@@ -2,6 +2,10 @@
 
 In the ravello directory you'll find ansible playbooks to configure the OpenStack Test Drive environment, as well as a tool to automatically generate an inventory file from published Ravello applications.
 
+## License clarification
+
+Unless otherwise noticed in the file itself, the content of this repository is GPL v3.0 licensed.
+
 ## Pre-requisites
 
 1. python-pip and python-virtualenv packages
@@ -9,7 +13,7 @@ In the ravello directory you'll find ansible playbooks to configure the OpenStac
 1. git package
 1. openstack-testdrive-config repository contents (aka this repository)
 
-## Getting pre-requisites
+## Installation
 
 ### python-pip and python-virtutalenv packages
 
