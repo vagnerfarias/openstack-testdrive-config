@@ -116,7 +116,7 @@ Current version of this configuration tool has some limitations:
 
 Because of that, you need to manually edit tdconfig.yaml and download the heat-admin ssh private key, as follows:
 
-1. Set the path to ssh public key to be used by attendants.
+#### Set the path to ssh public key to be used by attendants.
 
 ```
   tasks:
@@ -128,7 +128,7 @@ Because of that, you need to manually edit tdconfig.yaml and download the heat-a
         key: "{{ lookup('file', '/path/to/ssh-public-key') }}"
 ```
 
-1. Download heat-admin ssh private key from OpenStack Director node
+#### Download heat-admin ssh private key from OpenStack Director node
 
 Use scp to get the ssh private key from any enviroment. It'll be at ~stack/.ssh/id_rsa.
 
@@ -136,7 +136,7 @@ Use scp to get the ssh private key from any enviroment. It'll be at ~stack/.ssh/
 $ scp stack@<director-node>:.ssh/id_rsa ~/heat-admin-sshkey
 ```
 
-1. Set the path for heat-admin ssh private key in tdconfig.yaml
+#### Set the path for heat-admin ssh private key in tdconfig.yaml
 
 ```
 - hosts: overcloud-all
@@ -144,7 +144,6 @@ $ scp stack@<director-node>:.ssh/id_rsa ~/heat-admin-sshkey
     ansible_user: heat-admin
     ansible_ssh_private_key_file: /path/to/heat-admin-sshkey
   gather_facts: no
-
 ```
 
 ### Run the configuration Ansible playbook
